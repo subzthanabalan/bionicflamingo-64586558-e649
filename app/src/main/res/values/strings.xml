@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BionicFlamingo</string>
+    <string name="library">Library</string>
+    <string name="your_queue">Queue</string>
+    <string name="empty_queue">No items in queue</string>
+    <string name="book_cover">Book cover</string>
+</resources>
