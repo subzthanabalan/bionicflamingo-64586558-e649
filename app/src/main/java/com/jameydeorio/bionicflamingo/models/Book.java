@@ -10,6 +10,8 @@ public class Book {
     private String title;
     private String isbn;
     @SerializedName("cover") private String coverUrl;
+    private int[] authors;
+    private int publisher;
     private int queueId;
 
     public String getTitle() {
@@ -58,5 +60,21 @@ public class Book {
 
     public void setQueueId(int queueId) {
         this.queueId = queueId;
+    }
+
+    public int[] getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(int[] authors) {
+        this.authors = authors;
+    }
+
+    public int getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(int publisher) {
+        this.publisher = publisher;
     }
 }
