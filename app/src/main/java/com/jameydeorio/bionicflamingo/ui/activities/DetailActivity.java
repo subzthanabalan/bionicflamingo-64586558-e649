@@ -124,5 +124,31 @@ public class DetailActivity extends AppCompatActivity {
 
     private void removeBookFromQueue() {
         Log.i(DetailActivity.class.getSimpleName(), "Remove book "+mBook.getTitle()+" from queue "+queueId);
+        QueueApi queueApi = ServiceGenerator.createService(QueueApi.class);
+        Call<QueueItem> call = queueApi.deleteFromQueue(queueId);
+        call.enqueue(new Callback<QueueItem>() {
+            @Override
+            public void onResponse(Response<QueueItem> response) {
+                if (!response.isSuccess()) {
+                    Log.e(TAG, response.errorBody().toString());
+                    return;
+                }
+
+                QueueItem queueItem = response.body();
+
+                // Delete book from database
+                deleteBook();
+                finish();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
+
+    private void deleteBook() {
+        bookDataSource.delete(mBook);
     }
 }

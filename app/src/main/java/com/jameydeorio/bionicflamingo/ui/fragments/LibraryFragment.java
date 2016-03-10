@@ -61,7 +61,7 @@ public class LibraryFragment extends Fragment {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            final int bookId = Integer.parseInt(v.getTag().toString());
+            final int bookId = Integer.parseInt(v.getTag(R.id.bookID).toString());
             QueueApi queueApi = ServiceGenerator.createService(QueueApi.class);
             QueueItem queueItemPost = new QueueItem();
             queueItemPost.setBook(bookId);

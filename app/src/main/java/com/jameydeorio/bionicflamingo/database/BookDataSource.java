@@ -96,4 +96,15 @@ public class BookDataSource extends DataSource {
         database.endTransaction();
         close(database);
     }
+
+    public void delete(Book book) {
+        SQLiteDatabase database = open();
+        database.beginTransaction();
+
+        database.delete(DatabaseHandler.BOOKS_TABLE, DatabaseHandler.COLUMN_IDENTIFIER+"= ?", new String[] {String.valueOf(book.getIdentifier())});
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        close(database);
+    }
 }

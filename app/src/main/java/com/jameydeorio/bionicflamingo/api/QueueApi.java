@@ -23,6 +23,6 @@ public interface QueueApi {
     @POST("queue/")
     Call<QueueItem> addToQueue(@Body QueueItem queueItem);
 
-    @DELETE("queue/{id}")
-    Call<QueueItem> deleteFromQueue(@Body QueueItem queueItem);
+    @DELETE("queue/{id}/")
+    Call<QueueItem> deleteFromQueue(@Path("id") int id);
 }
