@@ -10,6 +10,7 @@ public class Book {
     private String title;
     private String isbn;
     @SerializedName("cover") private String coverUrl;
+    private int queueId;
 
     public String getTitle() {
         return title;
@@ -49,5 +50,13 @@ public class Book {
 
     public void setIdentifier(int identifier) {
         this.identifier = identifier;
+    }
+
+    public int getQueueId() {
+        return queueId;
+    }
+
+    public void setQueueId(int queueId) {
+        this.queueId = queueId;
     }
 }

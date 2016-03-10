@@ -69,7 +69,8 @@ public class YourQueueFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(getActivity(), DetailActivity.class);
-            intent.putExtra(Book.BOOK_ID_KEY, Integer.parseInt(v.getTag().toString()));
+            intent.putExtra(Book.BOOK_ID_KEY, Integer.parseInt((v.getTag(R.id.bookID).toString())));
+            intent.putExtra(QueueItem.QUEUE_ITEM_ID_KEY, Integer.parseInt((v.getTag(R.id.queueItemID)).toString()));
             startActivity(intent);
         }
     };
@@ -92,7 +93,7 @@ public class YourQueueFragment extends Fragment {
                     mEmptyQueueLabel.setVisibility(View.VISIBLE);
                 }
 
-                for (QueueItem queueItem : response.body()) {
+                for (final QueueItem queueItem : response.body()) {
                     Call<Book> call = mBookApi.getBook(queueItem.getBook());
                     call.enqueue(new Callback<Book>() {
                         @Override
@@ -101,7 +102,11 @@ public class YourQueueFragment extends Fragment {
                                 Log.e(TAG, response.errorBody().toString());
                                 return;
                             }
-                            mBooks.add(response.body());
+
+                            Book book = response.body();
+                            book.setQueueId(queueItem.getIdentifier());
+
+                            mBooks.add(book);
                             BookAdapter bookAdapter = new BookAdapter(mBooks);
                             bookAdapter.setOnClickListener(mOnClickListener);
                             mBookRecyclerView.setAdapter(bookAdapter);

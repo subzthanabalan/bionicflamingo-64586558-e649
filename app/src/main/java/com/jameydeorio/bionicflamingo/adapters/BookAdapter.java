@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jameydeorio.bionicflamingo.R;
 import com.jameydeorio.bionicflamingo.models.Book;
+import com.jameydeorio.bionicflamingo.models.QueueItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -61,7 +62,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         public void bindBook(Book book) {
             bookTitleLabel.setText(book.getTitle());
-            itemView.setTag(book.getIdentifier());
+            itemView.setTag(R.id.bookID, book.getIdentifier());
+            itemView.setTag(R.id.queueItemID, book.getQueueId());
             Picasso.with(mContext)
                     .load(book.getCoverUrl())
                     .into(bookImageView);

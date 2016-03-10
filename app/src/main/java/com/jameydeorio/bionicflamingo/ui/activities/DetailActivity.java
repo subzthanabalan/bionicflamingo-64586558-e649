@@ -5,16 +5,23 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jameydeorio.bionicflamingo.R;
 import com.jameydeorio.bionicflamingo.api.BookApi;
+import com.jameydeorio.bionicflamingo.api.QueueApi;
 import com.jameydeorio.bionicflamingo.api.ServiceGenerator;
 import com.jameydeorio.bionicflamingo.database.BookDataSource;
+import com.jameydeorio.bionicflamingo.database.QueueItemDataSource;
 import com.jameydeorio.bionicflamingo.models.Book;
+import com.jameydeorio.bionicflamingo.models.QueueItem;
 import com.squareup.picasso.Picasso;
+
+import java.util.Queue;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,9 +32,13 @@ public class DetailActivity extends AppCompatActivity {
 
     private TextView mTitleLabel;
     private ImageView mImageView;
+    private Button mDeleteButton;
 
     private Book mBook;
+    private int queueId;
+
     private BookDataSource bookDataSource;
+    private QueueItemDataSource queueItemDataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,11 +47,21 @@ public class DetailActivity extends AppCompatActivity {
 
         mTitleLabel = (TextView) findViewById(R.id.titleLabel);
         mImageView = (ImageView) findViewById(R.id.detailCoverImage);
+        mDeleteButton = (Button)findViewById(R.id.removeFromQueueButton);
 
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeBookFromQueue();
+            }
+        });
+
+        queueItemDataSource = new QueueItemDataSource(this);
         bookDataSource = new BookDataSource(this);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
+        queueId = extras.getInt(QueueItem.QUEUE_ITEM_ID_KEY);
         int bookId = extras.getInt(Book.BOOK_ID_KEY);
         mTitleLabel.setText(String.format("Book %s", bookId));
 
@@ -50,6 +71,7 @@ public class DetailActivity extends AppCompatActivity {
         } else {
             populateLabels();
         }
+
     }
 
     private void populateLabels() {
@@ -98,5 +120,9 @@ public class DetailActivity extends AppCompatActivity {
         String message = String.format(getResources().getString(messageId), bookId);
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    private void removeBookFromQueue() {
+        Log.i(DetailActivity.class.getSimpleName(), "Remove book "+mBook.getTitle()+" from queue "+queueId);
     }
 }

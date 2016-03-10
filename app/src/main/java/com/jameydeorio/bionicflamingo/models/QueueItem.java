@@ -3,6 +3,8 @@ package com.jameydeorio.bionicflamingo.models;
 import com.google.gson.annotations.SerializedName;
 
 public class QueueItem {
+    public static final String QUEUE_ITEM_ID_KEY = "queue_item_id";
+
     private int mId;
     @SerializedName("id") private int identifier;
     private int user;
