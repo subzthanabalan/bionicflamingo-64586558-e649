@@ -17,6 +17,7 @@ import com.jameydeorio.bionicflamingo.adapters.BookAdapter;
 import com.jameydeorio.bionicflamingo.api.BookApi;
 import com.jameydeorio.bionicflamingo.api.QueueApi;
 import com.jameydeorio.bionicflamingo.api.ServiceGenerator;
+import com.jameydeorio.bionicflamingo.database.QueueItemDataSource;
 import com.jameydeorio.bionicflamingo.models.Book;
 import com.jameydeorio.bionicflamingo.models.QueueItem;
 
@@ -33,6 +34,7 @@ public class LibraryFragment extends Fragment {
     private RecyclerView bookRecyclerView;
     private ProgressBar progressBar;
     private BookApi mBookApi;
+    private QueueItemDataSource queueItemDataSource;
 
     @Nullable
     @Override
@@ -40,6 +42,8 @@ public class LibraryFragment extends Fragment {
         View view = inflater.inflate(R.layout.library_fragment, container, false);
 
         mBookApi = ServiceGenerator.createService(BookApi.class);
+
+        queueItemDataSource = new QueueItemDataSource(getActivity());
 
         bookRecyclerView = (RecyclerView) view.findViewById(R.id.libraryRecyclerView);
         bookRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -72,6 +76,7 @@ public class LibraryFragment extends Fragment {
                     }
 
                     QueueItem queueItem = response.body();
+                    queueItemDataSource.create(queueItem);
                     Log.d(TAG, String.format("Downloaded queue item %s", queueItem.getId()));
 
                     // Notify user of success via a toast message
