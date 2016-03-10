@@ -10,32 +10,21 @@ import com.jameydeorio.bionicflamingo.models.Book;
 
 import java.util.ArrayList;
 
-public class BookDataSource {
-    private Context mContext;
-    private BookSQLiteHelper mBookSQLiteHelper;
+public class BookDataSource extends DataSource {
 
     public BookDataSource(Context context) {
-        mContext = context;
-        mBookSQLiteHelper = new BookSQLiteHelper(mContext);
-    }
-
-    private SQLiteDatabase open() {
-        return mBookSQLiteHelper.getWritableDatabase();
-    }
-
-    private void close(SQLiteDatabase database) {
-        database.close();
+        super(context);
     }
 
     public Book getBook(int bookId) {
         SQLiteDatabase database = open();
 
         Cursor cursor = database.query(
-                BookSQLiteHelper.BOOKS_TABLE,
-                new String[]{BaseColumns._ID, BookSQLiteHelper.COLUMN_TITLE,
-                        BookSQLiteHelper.COLUMN_IDENTIFIER, BookSQLiteHelper.COLUMN_ISBN,
-                        BookSQLiteHelper.COLUMN_COVER_URL},
-                String.format("%s=%s", BookSQLiteHelper.COLUMN_IDENTIFIER, bookId),
+                DatabaseHandler.BOOKS_TABLE,
+                new String[]{BaseColumns._ID, DatabaseHandler.COLUMN_TITLE,
+                        DatabaseHandler.COLUMN_IDENTIFIER, DatabaseHandler.COLUMN_ISBN,
+                        DatabaseHandler.COLUMN_COVER_URL},
+                String.format("%s=%s", DatabaseHandler.COLUMN_IDENTIFIER, bookId),
                 null, null, null, null
         );
 
@@ -49,10 +38,10 @@ public class BookDataSource {
 
         if (cursor.moveToFirst()) {
             book.setId(getIntFromColumnName(cursor, BaseColumns._ID));
-            book.setIdentifier(getIntFromColumnName(cursor, BookSQLiteHelper.COLUMN_IDENTIFIER));
-            book.setIsbn(getStringFromColumnName(cursor, BookSQLiteHelper.COLUMN_ISBN));
-            book.setTitle(getStringFromColumnName(cursor, BookSQLiteHelper.COLUMN_TITLE));
-            book.setCoverUrl(getStringFromColumnName(cursor, BookSQLiteHelper.COLUMN_TITLE));
+            book.setIdentifier(getIntFromColumnName(cursor, DatabaseHandler.COLUMN_IDENTIFIER));
+            book.setIsbn(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_ISBN));
+            book.setTitle(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_TITLE));
+            book.setCoverUrl(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_TITLE));
         }
 
         cursor.close();
@@ -65,10 +54,10 @@ public class BookDataSource {
         SQLiteDatabase database = open();
 
         Cursor cursor = database.query(
-                BookSQLiteHelper.BOOKS_TABLE,
-                new String[]{BaseColumns._ID, BookSQLiteHelper.COLUMN_TITLE,
-                        BookSQLiteHelper.COLUMN_IDENTIFIER, BookSQLiteHelper.COLUMN_ISBN,
-                        BookSQLiteHelper.COLUMN_COVER_URL},
+                DatabaseHandler.BOOKS_TABLE,
+                new String[]{BaseColumns._ID, DatabaseHandler.COLUMN_TITLE,
+                        DatabaseHandler.COLUMN_IDENTIFIER, DatabaseHandler.COLUMN_ISBN,
+                        DatabaseHandler.COLUMN_COVER_URL},
                 null, null, null, null, null
         );
 
@@ -78,10 +67,10 @@ public class BookDataSource {
             do {
                 Book book = new Book();
                 book.setId(getIntFromColumnName(cursor, BaseColumns._ID));
-                book.setIdentifier(getIntFromColumnName(cursor, BookSQLiteHelper.COLUMN_IDENTIFIER));
-                book.setIsbn(getStringFromColumnName(cursor, BookSQLiteHelper.COLUMN_ISBN));
-                book.setTitle(getStringFromColumnName(cursor, BookSQLiteHelper.COLUMN_TITLE));
-                book.setCoverUrl(getStringFromColumnName(cursor, BookSQLiteHelper.COLUMN_COVER_URL));
+                book.setIdentifier(getIntFromColumnName(cursor, DatabaseHandler.COLUMN_IDENTIFIER));
+                book.setIsbn(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_ISBN));
+                book.setTitle(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_TITLE));
+                book.setCoverUrl(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_COVER_URL));
                 books.add(book);
             } while (cursor.moveToNext());
         }
@@ -92,26 +81,16 @@ public class BookDataSource {
         return books;
     }
 
-    private int getIntFromColumnName(Cursor cursor, String column) {
-        int columnIndex = cursor.getColumnIndex(column);
-        return cursor.getInt(columnIndex);
-    }
-
-    private String getStringFromColumnName(Cursor cursor, String column) {
-        int columnIndex = cursor.getColumnIndex(column);
-        return cursor.getString(columnIndex);
-    }
-
     public void create(Book book) {
         SQLiteDatabase database = open();
         database.beginTransaction();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(BookSQLiteHelper.COLUMN_IDENTIFIER, book.getIdentifier());
-        contentValues.put(BookSQLiteHelper.COLUMN_ISBN, book.getIsbn());
-        contentValues.put(BookSQLiteHelper.COLUMN_TITLE, book.getTitle());
-        contentValues.put(BookSQLiteHelper.COLUMN_COVER_URL, book.getCoverUrl());
-        database.insert(BookSQLiteHelper.BOOKS_TABLE, null, contentValues);
+        contentValues.put(DatabaseHandler.COLUMN_IDENTIFIER, book.getIdentifier());
+        contentValues.put(DatabaseHandler.COLUMN_ISBN, book.getIsbn());
+        contentValues.put(DatabaseHandler.COLUMN_TITLE, book.getTitle());
+        contentValues.put(DatabaseHandler.COLUMN_COVER_URL, book.getCoverUrl());
+        database.insert(DatabaseHandler.BOOKS_TABLE, null, contentValues);
 
         database.setTransactionSuccessful();
         database.endTransaction();
