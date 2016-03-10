@@ -6,6 +6,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -15,4 +16,7 @@ public interface QueueApi {
 
     @POST("queue/")
     Call<QueueItem> addToQueue(@Body QueueItem queueItem);
+
+    @DELETE("queue/{id}")
+    Call<QueueItem> deleteFromQueue(@Body QueueItem queueItem);
 }
