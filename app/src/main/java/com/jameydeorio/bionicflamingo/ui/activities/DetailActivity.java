@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jameydeorio.bionicflamingo.R;
 import com.jameydeorio.bionicflamingo.api.BookApi;
@@ -79,12 +80,23 @@ public class DetailActivity extends AppCompatActivity {
                 mBook = response.body();
                 bookDataSource.create(mBook);
                 populateLabels();
+
+                showToastMessage(true, mBook.getIdentifier());
             }
 
             @Override
             public void onFailure(Throwable t) {
                 Log.e(TAG, t.toString());
+
+                showToastMessage(false, mBook.getIdentifier());
             }
         });
+    }
+
+    private void showToastMessage(boolean wasSuccessful, int bookId) {
+        int messageId = (wasSuccessful) ? R.string.book_downloaded_success : R.string.book_downloaded_failure;
+        String message = String.format(getResources().getString(messageId), bookId);
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 }

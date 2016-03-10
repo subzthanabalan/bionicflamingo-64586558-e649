@@ -6,4 +6,6 @@
     <string name="book_cover">Book cover</string>
     <string name="book_added_success">%1$d was successfully added to your Queue!</string>
     <string name="book_added_failure">%1$d could not be added to your Queue at this time</string>
+    <string name="book_downloaded_success">%1$d was successfully downloaded to your device!</string>
+    <string name="book_downloaded_failure">%1$d could not be downloaded to your device at this time</string>
 </resources>
