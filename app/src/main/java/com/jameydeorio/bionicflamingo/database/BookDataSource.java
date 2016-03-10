@@ -41,7 +41,7 @@ public class BookDataSource extends DataSource {
             book.setIdentifier(getIntFromColumnName(cursor, DatabaseHandler.COLUMN_IDENTIFIER));
             book.setIsbn(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_ISBN));
             book.setTitle(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_TITLE));
-            book.setCoverUrl(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_TITLE));
+            book.setCoverUrl(getStringFromColumnName(cursor, DatabaseHandler.COLUMN_COVER_URL));
         }
 
         cursor.close();
