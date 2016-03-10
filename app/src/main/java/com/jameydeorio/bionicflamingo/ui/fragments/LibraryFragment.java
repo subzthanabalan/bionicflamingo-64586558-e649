@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.jameydeorio.bionicflamingo.R;
 import com.jameydeorio.bionicflamingo.adapters.BookAdapter;
@@ -56,7 +57,7 @@ public class LibraryFragment extends Fragment {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            int bookId = Integer.parseInt(v.getTag().toString());
+            final int bookId = Integer.parseInt(v.getTag().toString());
             QueueApi queueApi = ServiceGenerator.createService(QueueApi.class);
             QueueItem queueItemPost = new QueueItem();
             queueItemPost.setBook(bookId);
@@ -72,11 +73,17 @@ public class LibraryFragment extends Fragment {
 
                     QueueItem queueItem = response.body();
                     Log.d(TAG, String.format("Downloaded queue item %s", queueItem.getId()));
+
+                    // Notify user of success via a toast message
+                    showToastMessage(true, bookId);
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
                     Log.e(TAG, t.toString());
+
+                    // Notify user of failure via a toast message
+                    showToastMessage(false, bookId);
                 }
             });
         }
@@ -106,5 +113,12 @@ public class LibraryFragment extends Fragment {
                 progressBar.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    private void showToastMessage(boolean wasSuccessful, int bookId) {
+        int messageId = (wasSuccessful) ? R.string.book_added_success : R.string.book_added_failure;
+        String message = String.format(getResources().getString(messageId), bookId);
+        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+        toast.show();
     }
 }

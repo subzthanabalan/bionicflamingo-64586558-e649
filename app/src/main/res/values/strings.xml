@@ -4,4 +4,6 @@
     <string name="your_queue">Queue</string>
     <string name="empty_queue">No items in queue</string>
     <string name="book_cover">Book cover</string>
+    <string name="book_added_success">%1$d was successfully added to your Queue!</string>
+    <string name="book_added_failure">%1$d could not be added to your Queue at this time</string>
 </resources>
